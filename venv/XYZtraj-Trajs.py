@@ -4,6 +4,7 @@ import sys
 import os
 import glob
 import matplotlib as mpl
+import shutil
 mpl.use('Agg')
 import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
@@ -15,6 +16,7 @@ from scipy import stats
 from scipy.stats import norm
 
 def mkdir():
+	'''
 	os.system('rm -r ./trajTS')
 	os.system('rm -r ./reorder')
 	os.system('rm -r ./TDD')
@@ -29,6 +31,14 @@ def mkdir():
 	os.system('mkdir ./TDD_r2r')
 	os.system('mkdir ./TDD_p2p')
 	os.system('mkdir ./TDD_inter')
+	'''
+	os.makedirs('./trajTS')
+	os.makedirs('./reorder')
+    	os.makedirs('./TDD')
+    	os.makedirs('./TDD_r2p')
+    	os.makedirs('./TDD_r2r')
+	os.makedirs('./TDD_p2p')
+	os.makedirs('./TDD_inter')
 	return 1
 
 def Get_atomindex():
@@ -149,7 +159,7 @@ class Trajectories:
                             fileout_reorder.write(self.lines[(self.n_idx - 1 - i) * (self.n_atoms + 2) + j])
                     for i in range(0, n1):
                         for j in range(0, self.n_atoms + 2):
-                            fileout_reorder.write(self.lines[i * (self.n_atoms + 2) + j])
+                            fileout_reorder.write(self.lines[(i + n2) * (self.n_atoms + 2) + j])
                 if (bond_D1[0] > bond_D2[0]):
                     for i in range(0, n1):
                         for j in range(0, self.n_atoms + 2):
@@ -190,18 +200,39 @@ class Trajectories:
         fileout_traj.close()
 #Now start classifying trajectories
         if (bond_R[0] > bond_TS[0] > bond_P[0]):
-            os.system('cp ./TDD/' + self.name + '.txt '+'./TDD_r2p/' + self.name + '.txt')
+            #os.system('cp ./TDD/' + self.name + '.txt '+'./TDD_r2p/' + self.name + '.txt')
+		shutil.copyfile('./TDD/' + self.name + '.txt ','./TDD_r2p/' + self.name + '.txt')
             print('go to r2p')
         elif (bond_R[0] >= bond_TS[0]) and (bond_P[0] >= bond_TS[0]):
-            os.system('cp ./TDD/' + self.name + '.txt '+'./TDD_r2r/' + self.name + '.txt')
+            #os.system('cp ./TDD/' + self.name + '.txt '+'./TDD_r2r/' + self.name + '.txt')
+		shutil.copyfile('./TDD/' + self.name + '.txt ','./TDD_r2r/' + self.name + '.txt')
             print('go to r2r')
         elif (bond_R[0] <= bond_TS[0]) and (bond_P[0] <= bond_TS[0]):
-            os.system('cp ./TDD/' + self.name + '.txt '+'./TDD_p2p/' + self.name + '.txt')
+            #os.system('cp ./TDD/' + self.name + '.txt '+'./TDD_p2p/' + self.name + '.txt')
+		shutil.copyfile('./TDD/' + self.name + '.txt ','./TDD_p2p/' + self.name + '.txt')
             print('go to p2p')
         else:
-            os.system('cp ./TDD/' + self.name + '.txt '+'./TDD_inter/' + self.name + '.txt')
+            #os.system('cp ./TDD/' + self.name + '.txt '+'./TDD_inter/' + self.name + '.txt')
+		shutil.copyfile('./TDD/' + self.name + '.txt ','./TDD_inter/' + self.name + '.txt')
             print('go to intermediate')
-
+## time_gap function calculate the time gap between the first bond formation and the second bond formation.
+    def time_gap(self, judge_bond1 = 1.6 ,judge_bond2 = 1.6 ):
+        time_gap = []
+        for filename in glob.glob('./time_gap/*.xyz'):    
+            for i in range(0, self.n_idx):
+                time_bond1 = self.Get_distance(i)
+                #print(time_bond1[0])
+                if time_bond1[0] >=judge_bond1:
+                    break
+            for j in range(0, self.n_idx):
+                time_bond2 = self.Get_distance(j)
+                #print(time_bond2[1])
+                if time_bond1[1] >=judge_bond2:
+                    break
+            t = j-i
+            time_gap.append(t)
+        average = np.mean(time_gap)
+        print('the time gap is：%s fs' %(average))        
 
 # main func
 def main():
@@ -213,12 +244,13 @@ def main():
 #        self.Get_distance(1)
 #        self.TS_finder()
 #        self.Rearrangement()
+	T = Trajectories(filename, atom)
     for filename in glob.glob('./ntraj/*.xyz'):
-        Trajectories(filename, atom).TS_finder()
-        Trajectories(filename, atom).Rearrangement()
+	T.TS_finder()
+	T.Rearrangement()
 #        self.Classification() Note: Classification has to be called after Rearrangement or when reorder has been performed.
     for filename in glob.glob('./reorder/*.xyz'):
-        Trajectories(filename, atom).Classification()
+        T.Classification()
     print('Done trajectory analysis!')
 #    TS = hist('./trajTS/trajTs.txt')
 #    print('Done histogram :', TS)
