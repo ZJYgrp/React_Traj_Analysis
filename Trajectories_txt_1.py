@@ -1,6 +1,7 @@
 import pandas as pd
 import numpy as np
 from matplotlib.pyplot import MultipleLocator
+import matplotlib.pyplot as plt
 import glob
 class Trajectories_txt:
     def __init__(self,filename):
