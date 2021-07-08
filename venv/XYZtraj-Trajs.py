@@ -18,35 +18,81 @@ def mkdir():
 	os.system('rm -r ./trajTS')
 	os.system('rm -r ./reorder')
 	os.system('rm -r ./TDD')
-	os.system('rm -r ./TDD_r2p')
+	os.system('rm -r ./TDD_r2p*')
 	os.system('rm -r ./TDD_r2r')
-	os.system('rm -r ./TDD_p2p')
+	os.system('rm -r ./TDD_p2p*')
 	os.system('rm -r ./TDD_inter')
 	os.system('mkdir ./trajTS')
 	os.system('mkdir ./reorder')
 	os.system('mkdir ./TDD')
-	os.system('mkdir ./TDD_r2p')
+	os.system('mkdir ./TDD_r2pA')
+	os.system('mkdir ./TDD_r2pB')
 	os.system('mkdir ./TDD_r2r')
-	os.system('mkdir ./TDD_p2p')
+	os.system('mkdir ./TDD_p2pA')
+	os.system('mkdir ./TDD_p2pB')
 	os.system('mkdir ./TDD_inter')
 	return 1
 
-def Get_atomindex():
+def read_conf_file():
+    f = open('traj.conf')
+    lines = [a.strip() for a in f.readlines()]
+    f.close()
+    reset = lines[0]
+    if not lines[1].isdigit():
+        print('Invalid mode in conf file, must be a number')
+        exit(1)
+    else:
+        mode = int(lines[1])
+        if mode < 1 or mode > 2:
+            print('Invalid mode in conf file, too large or too small')
+            exit(1)
+    atoms = []
+    for num in lines[2].split():
+        if not num.isdigit():
+            print('Invalid atom index')
+            exit(1)
+        else:
+            atoms.append(int(num))
+    if (len(atoms) % 2) != 0:
+        raise TypeError('Odd number of atomic indices have been received–this is ODD!')
+    elif (mode == 1 and len(atoms) != 6) or (mode == 2 and len(atoms) != 4):
+        print('Invalid number of atoms. Exiting program')
+        exit(1)
+    print ('Run ...')
+    return reset, mode, atoms
+    
+
+def Get_mode():
+    print('Available modes:\nMode 1:\t1 bond always forms, then 1 of 2 other bonds forms to create 2 products\nMode 2:\t1 of 2 possible bonds form to create 2 products\n')
+    mode = input('Please choose analysis mode: ')
+    if not mode.isdigit() or int(mode) < 1 or int(mode) > 2:
+        print('Invalid mode selection. Exiting program')
+        exit(1)
+    return int(mode) 
+
+def Get_atomindex(mode):
+    if mode == 1:
+        print('Enter indices for bond that always forms, then for the bonds corresponding to products A and B')
+    elif mode == 2:
+        print('Enter indices for bonds corresponding to product A, then product B')
     atoms = [int(x) for x in
-            input("Input atomic indexs corresponding to N bonds, using ' ' as delimiter. Making sure forming bond goes first\n").split()]
+            input("Input atomic indices corresponding to N bonds, using ' ' as delimiter. Make sure the forming bond goes first\n").split()]
     for i in range(0,len(atoms)):
         print('atom ', str(i+1), ' ', str(atoms[i]))
-    judge = input("Do you think the indexes are reasonable ?(y/n)")
+    judge = input('Do you think the indices are reasonable?(y/n): ')
     if judge != 'y':
         print('I have to quit, sorry!')
         exit(1)
     if (len(atoms) % 2) != 0:
-        raise TypeError('Odd number of atomic indexes have been received–this is ODD!')
+        raise TypeError('Odd number of atomic indices have been received–this is ODD!')
+    elif (mode == 1 and len(atoms) != 6) or (mode == 2 and len(atoms) != 4):
+        print('Invalid number of atoms. Exiting program')
+        exit(1)
     print ('Run ...')
     return atoms
 
 class Trajectories:
-    def __init__(self, file, atoms):
+    def __init__(self, file, atoms, mode):
         # trajectory format for ProgDyn output
         self.name = os.path.basename(file)
         print ('Working on '+self.name)
@@ -58,6 +104,7 @@ class Trajectories:
         #Creating new folders for the following analysis
         #Open new file handles and get parameters
         self.atoms = atoms
+        self.mode = mode
         self.lines = open(file).readlines()
         self.n_lines = len(self.lines)
         if self.n_lines == 0:
@@ -189,6 +236,7 @@ class Trajectories:
                 fileout_traj.write("\n")
         fileout_traj.close()
 #Now start classifying trajectories
+        '''
         if (bond_R[0] > bond_TS[0] > bond_P[0]):
             os.system('cp ./TDD/' + self.name + '.txt '+'./TDD_r2p/' + self.name + '.txt')
             print('go to r2p')
@@ -201,25 +249,73 @@ class Trajectories:
         else:
             os.system('cp ./TDD/' + self.name + '.txt '+'./TDD_inter/' + self.name + '.txt')
             print('go to intermediate')
+        '''
+        if self.mode == 1:
+            if (bond_R[0] > bond_TS[0] > bond_P[0]):
+                if (bond_P[1] < bond_P[2]):
+                    os.system('cp ./TDD/' + self.name + '.txt '+'./TDD_r2pA/' + self.name + '.txt')
+                    print('go to r2pA')
+                    return 'A'
+                else:
+                    os.system('cp ./TDD/' + self.name + '.txt '+'./TDD_r2pB/' + self.name + '.txt')
+                    print('go to r2pB')
+                    return 'B'
+
+            elif (bond_R[0] >= bond_TS[0]) and (bond_P[0] >= bond_TS[0]):
+                os.system('cp ./TDD/' + self.name + '.txt '+'./TDD_r2r/' + self.name + '.txt')
+                print('go to r2r')
+                return 'R'
+            elif (bond_R[0] <= bond_TS[0]) and (bond_P[0] <= bond_TS[0]):
+               if (bond_P[1] < bond_P[2]):
+                    os.system('cp ./TDD/' + self.name + '.txt '+'./TDD_r2pA/' + self.name + '.txt')
+                    print('go to r2pA')
+                    return 'A'
+               else:
+                    os.system('cp ./TDD/' + self.name + '.txt '+'./TDD_r2pB/' + self.name + '.txt')
+                    print('go to r2pB')
+                    return 'B'
+
+            else:
+                os.system('cp ./TDD/' + self.name + '.txt '+'./TDD_inter/' + self.name + '.txt')
+                print('go to intermediate')
+                return 'I'
+        elif self.mode == 2:
+            print('Not ready yet ... try again later')
 
 
 # main func
 def main():
 # Remember to add a choice function regarding the removal of current folders
-    judge = input("Do you want to start analyznig from the very beginning ?(y/n) Type y to remove all analysis folders and n to keep the current folder (e.g. reorder, etc.) for analysis")
-    if judge == 'y': mkdir()
-    atom = Get_atomindex()
+    if os.path.exists('traj.conf'):
+        reset, mode, atom = read_conf_file()
+        if reset == 'y': mkdir()
+    else:
+        judge = input("Do you want to start analyzing from the very beginning? (y/n) Type y to remove all analysis folders and n to keep the current folder (e.g. reorder, etc.) for analysis: ")
+        if judge == 'y': mkdir()
+        mode = Get_mode()
+        atom = Get_atomindex(mode)
 # The attribute of Trajectories Class involves
 #        self.Get_distance(1)
 #        self.TS_finder()
 #        self.Rearrangement()
     for filename in glob.glob('./ntraj/*.xyz'):
-        Trajectories(filename, atom).TS_finder()
-        Trajectories(filename, atom).Rearrangement()
-#        self.Classification() Note: Classification has to be called after Rearrangement or when reorder has been performed.
+        Trajectories(filename, atom, mode).TS_finder()
+        Trajectories(filename, atom, mode).Rearrangement()
+#       self.Classification() Note: Classification has to be called after Rearrangement or when reorder has been performed.
+    total, A, B, revert, inter = 0, 0, 0, 0, 0
     for filename in glob.glob('./reorder/*.xyz'):
-        Trajectories(filename, atom).Classification()
-    print('Done trajectory analysis!')
+        result = Trajectories(filename, atom, mode).Classification()
+        total += 1
+        if result == 'A':
+            A += 1
+        elif result == 'B':
+            B += 1
+        elif result == 'R':
+            revert += 1
+        else:
+            inter += 1
+    print('Trajectory analysis complete!')
+    print(f'\nResults\nTotal number of trajectories: {total}\nA: {A} B: {B} Reactant: {revert} Intermediate: {inter}\nPercent product A: {(A*100/(A+B)):5.2f}%\nPercent product B: {(B*100/(A+B)):5.2f}%')
 #    TS = hist('./trajTS/trajTs.txt')
 #    print('Done histogram :', TS)
 #    print('Complete !')
