@@ -25,11 +25,11 @@ def mkdir():
         os.system('mkdir ./trajTS')
         os.system('mkdir ./reorder')
         os.system('mkdir ./TDD')
-        os.system('mkdir ./TDD_r2pA')
-        os.system('mkdir ./TDD_r2pB')
+        os.system('mkdir ./TDD_r2pX')
+        os.system('mkdir ./TDD_r2pY')
         os.system('mkdir ./TDD_r2r')
-        os.system('mkdir ./TDD_p2pA')
-        os.system('mkdir ./TDD_p2pB')
+        os.system('mkdir ./TDD_p2pX')
+        os.system('mkdir ./TDD_p2pY')
         os.system('mkdir ./TDD_inter')
         return 1
 
@@ -255,13 +255,13 @@ class Trajectories:
         if self.mode == 1:
             if (bond_R[0] > bond_TS[0] > bond_P[0]):
                 if (bond_P[1] < bond_P[2]):
-                    os.system('cp ./TDD/' + self.name + '.txt '+'./TDD_r2pA/' + self.name + '.txt')
-                    print('go to r2pA')
-                    return 'A'
+                    os.system('cp ./TDD/' + self.name + '.txt '+'./TDD_r2pX/' + self.name + '.txt')
+                    print('go to r2pX')
+                    return 'X'
                 else:
-                    os.system('cp ./TDD/' + self.name + '.txt '+'./TDD_r2pB/' + self.name + '.txt')
-                    print('go to r2pB')
-                    return 'B'
+                    os.system('cp ./TDD/' + self.name + '.txt '+'./TDD_r2pY/' + self.name + '.txt')
+                    print('go to r2pY')
+                    return 'Y'
 
             elif (bond_R[0] >= bond_TS[0]) and (bond_P[0] >= bond_TS[0]):
                 os.system('cp ./TDD/' + self.name + '.txt '+'./TDD_r2r/' + self.name + '.txt')
@@ -269,13 +269,13 @@ class Trajectories:
                 return 'R'
             elif (bond_R[0] <= bond_TS[0]) and (bond_P[0] <= bond_TS[0]):
                if (bond_P[1] < bond_P[2]):
-                    os.system('cp ./TDD/' + self.name + '.txt '+'./TDD_p2pA/' + self.name + '.txt')
-                    print('go to p2pA')
-                    return 'A'
+                    os.system('cp ./TDD/' + self.name + '.txt '+'./TDD_p2pX/' + self.name + '.txt')
+                    print('go to p2pX')
+                    return 'X'
                else:
-                    os.system('cp ./TDD/' + self.name + '.txt '+'./TDD_p2pB/' + self.name + '.txt')
-                    print('go to p2pB')
-                    return 'B'
+                    os.system('cp ./TDD/' + self.name + '.txt '+'./TDD_p2pY/' + self.name + '.txt')
+                    print('go to p2pY')
+                    return 'Y'
 
             else:
                 os.system('cp ./TDD/' + self.name + '.txt '+'./TDD_inter/' + self.name + '.txt')
@@ -284,13 +284,13 @@ class Trajectories:
         elif self.mode == 2:
             if (bond_R[0] > bond_TS[0] > bond_P[0]) or (bond_R[1] > bond_TS[1] > bond_P[1]):
                 if (bond_P[0] < bond_P[1]):
-                    os.system('cp ./TDD/' + self.name + '.txt '+'./TDD_r2pA/' + self.name + '.txt')
-                    print('go to r2pA')
-                    return 'A'
+                    os.system('cp ./TDD/' + self.name + '.txt '+'./TDD_r2pX/' + self.name + '.txt')
+                    print('go to r2pX')
+                    return 'X'
                 else:
-                    os.system('cp ./TDD/' + self.name + '.txt '+'./TDD_r2pB/' + self.name + '.txt')
-                    print('go to r2pB')
-                    return 'B'
+                    os.system('cp ./TDD/' + self.name + '.txt '+'./TDD_r2pY/' + self.name + '.txt')
+                    print('go to r2pY')
+                    return 'Y'
 
             elif (bond_R[0] >= bond_TS[0] and bond_P[0] >= bond_TS[0] and bond_R[1] >= bond_TS[1] and bond_P[1] >= bond_TS[1]):
                 os.system('cp ./TDD/' + self.name + '.txt '+'./TDD_r2r/' + self.name + '.txt')
@@ -298,13 +298,13 @@ class Trajectories:
                 return 'R'
             elif (bond_R[0] <= bond_TS[0]) and (bond_P[0] <= bond_TS[0]) or (bond_R[1] <= bond_TS[1]) and (bond_P[1] <= bond_TS[1]):
                if (bond_P[0] < bond_P[1]):
-                    os.system('cp ./TDD/' + self.name + '.txt '+'./TDD_p2pA/' + self.name + '.txt')
-                    print('go to p2pA')
-                    return 'A'
+                    os.system('cp ./TDD/' + self.name + '.txt '+'./TDD_p2pX/' + self.name + '.txt')
+                    print('go to p2pX')
+                    return 'X'
                else:
-                    os.system('cp ./TDD/' + self.name + '.txt '+'./TDD_p2pB/' + self.name + '.txt')
-                    print('go to p2pB')
-                    return 'B'
+                    os.system('cp ./TDD/' + self.name + '.txt '+'./TDD_p2pY/' + self.name + '.txt')
+                    print('go to p2pY')
+                    return 'Y'
 
             else:
                 os.system('cp ./TDD/' + self.name + '.txt '+'./TDD_inter/' + self.name + '.txt')
@@ -336,17 +336,17 @@ class Trajectories:
                     bond1 = runpoint-1
                 if product == '' and bond[1] <= 1.6:
                     bond2 = runpoint-1
-                    product = 'A'
+                    product = 'X'
                 if product == '' and bond[2] <= 1.6:
                     bond3 = runpoint-1
-                    product = 'B'
+                    product = 'Y'
             elif self.mode == 2:
                 if product == '' and bond[0] <= 1.6:
                     bond1 = runpoint-1
-                    product = 'A'
+                    product = 'X'
                 if product == '' and bond[1] <= 1.6:
                     bond2 = runpoint-1
-                    product = 'B'
+                    product = 'Y'
             if i<n1:
                 fileout_traj.write(str(-runpoint+1)+ ', ')
                 fileout_traj.write(', '.join([str(bond[j]) for j in range(len(bond))]))
@@ -363,71 +363,20 @@ class Trajectories:
         if self.mode == 1:
             if bond1 < -1 or bond2 < -1 or bond3 < -1:
                 return -1
-            if product == 'A':
+            if product == 'X':
                 return [product, bond1, bond2]
-            elif product == 'B':
+            elif product == 'Y':
                 return [product, bond1, bond3]
             else:
                 return -1
         elif self.mode == 2:
             if bond1 < -1 or bond2 < -1:
                 return -1
-            if product == 'A':
+            if product == 'X':
                 return [product, bond1]
-            elif product == 'B':
+            elif product == 'Y':
                 return [product, bond2]
             else:
                 return -1
 
-
-
-def log_results(A, B, revert, inter, total):
-  out = open('./trajTS/traj_log', 'w+')
-  out.write('Results\nTotal number of trajectories: '+str(total)+'\nTotal forming product: '+str(A+B)+'\nA: '+str(A)+' B: '+str(B)+' Reactant: '+str(revert)+' Intermediate: '+str(inter)+'\nPercent product A: '+str((A*100/(A+B)))+'%\nPercent product B: '+str(B*100/(A+B))+'%')
-
-
-# main func
-def main():
-# Remember to add a choice function regarding the removal of current folders
-    if os.path.exists('traj.conf'):
-        reset, mode, atom = read_conf_file()
-        if reset == 'y': mkdir()
-    else:
-        judge = input('Do you want to start analyzing from the very beginning? (y/n) Type y to remove all analysis folders and n to keep the current folder (e.g. reorder, etc.) for analysis: ')
-        if judge == 'y': mkdir()
-        mode = Get_mode()
-        atom = Get_atomindex(mode)
-# The attribute of Trajectories Class involves
-#        self.Get_distance(1)
-#        self.TS_finder()
-#        self.Rearrangement()
-    for filename in glob.glob('./ntraj/*.xyz'):
-        Trajectories(filename, atom, mode).TS_finder()
-        Trajectories(filename, atom, mode).Rearrangement()
-#       self.Classification() Note: Classification has to be called after Rearrangement or when reorder has been performed.
-    total, A, B, revert, inter = 0, 0, 0, 0, 0
-    for filename in glob.glob('./reorder/*.xyz'):
-        result = Trajectories(filename, atom, mode).Classification()
-        total += 1
-        if result == 'A':
-            A += 1
-        elif result == 'B':
-            B += 1
-        elif result == 'R':
-            revert += 1
-        else:
-            inter += 1
-    print('Trajectory analysis complete!')
-    if (A+B == 0):
-        print('Neither product A nor B was formed')
-    else:
-        log_results(A, B, revert, inter, total)
-        print('Results\nTotal number of trajectories: '+str(total)+'\nTotal forming product: '+str(A+B)+'\nA: '+str(A)+' B: '+str(B)+' Reactant: '+str(revert)+' Intermediate: '+str(inter)+'\nPercent product A: '+str((A*100/(A+B)))+'%\nPercent product B: '+str(B*100/(A+B))+'%')
-#    TS = hist('./trajTS/trajTs.txt')
-#    print('Done histogram :', TS)
-#    print('Complete !')
-
-
-if __name__ == '__main__':
-    main()
-                                                 
+                                        
