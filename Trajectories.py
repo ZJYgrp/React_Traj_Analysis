@@ -1,4 +1,4 @@
-# This script should be revised to an object-oriented program, which defines TS extraction class, trajectories classfication class, etc.
+# TS Extraction and Trajectory classification class
 import numpy as np
 import sys
 import os
