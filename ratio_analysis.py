@@ -78,19 +78,19 @@ def get_atom_index(mode):
     return atoms
 
 
-def log_results(X, Y, revert, inter, total):
+def log_results(X, Y, revert, inter, p2p, total):
     out = open('./trajTS/traj_log', 'w+')
     output = 'Results\n' \
              'Total number of trajectories: {0}\n' \
              'Total forming product: {1}\n' \
-             'X: {2} Y: {3} Reactant: {4} Intermediate: {5}\n' \
-             'Percent product X: {6}%\n' \
-             'Percent product Y: {7}%'.format(
-                 str(total),
-                 str(X + Y),
-                 str(X), str(Y), str(revert), str(inter),
-                 str((X * 100 / (X + Y))),
-                 str(Y * 100 / (X + Y)))
+             'X: {2} Y: {3} Reactant: {4} P2P: {5} Intermediate: {6}\n' \
+             'Percent product X: {7:.1f}%\n' \
+             'Percent product Y: {8:.1f}%'.format(
+                 total,
+                 (X + Y),
+                 X, Y, revert, p2p, inter,
+                 (X * 100 / (X + Y))),
+                 (Y * 100 / (X + Y)))
     out.write(output)
     out.close()
     return output
@@ -116,26 +116,28 @@ def main():
     #    self.Get_distance(1)
     #    self.TS_finder()
     #    self.Rearrangement()
-    for filename in glob.glob('./ntraj/*.'):
+    for filename in glob.glob('./ntraj/*'):
         Trajectories(filename, atom, mode).TS_finder()
         Trajectories(filename, atom, mode).rearrangement()
-    total, X, Y, revert, inter = 0, 0, 0, 0, 0
-    for filename in glob.glob('./reorder/*.'):
+    total, X, Y, revert, p2p, inter = 0, 0, 0, 0, 0, 0
+    for filename in glob.glob('./reorder/*'):
         result = Trajectories(filename, atom, mode).classification()
         total += 1
-        if result == 'X':
+        if result == 'XR':
             X += 1
-        elif result == 'Y':
+        elif result == 'YR':
             Y += 1
         elif result == 'R':
             revert += 1
+        elif result == 'XP' or result == 'YP':
+            p2p += 1
         else:
             inter += 1
     print('Trajectory analysis complete!')
     if X + Y == 0:
         print('Neither product X nor Y was formed')
-    # else:
-        output = log_results(X, Y, revert, inter, total)
+    else:
+        output = log_results(X, Y, revert, inter, p2p, total)
         print(output)
 
 

@@ -172,26 +172,26 @@ class Trajectories:
             if bond_R[0] > bond_TS[0] > bond_P[0]:
                 if bond_P[1] < bond_P[2]:
                     os.system('cp ./TDD/' + self.name + '.txt ' + './TDD_r2pX/' + self.name + '.txt')
-                    print('go to r2pX')
-                    return 'X'
+                    # print('go to r2pX')
+                    return 'XR'
 
                 os.system('cp ./TDD/' + self.name + '.txt ' + './TDD_r2pY/' + self.name + '.txt')
-                print('go to r2pY')
-                return 'Y'
+                # print('go to r2pY')
+                return 'YR'
 
             if bond_R[0] >= bond_TS[0] and bond_P[0] >= bond_TS[0]:
                 os.system('cp ./TDD/' + self.name + '.txt ' + './TDD_r2r/' + self.name + '.txt')
-                print('go to r2r')
+                # print('go to r2r')
                 return 'R'
             if bond_R[0] <= bond_TS[0] and bond_P[0] <= bond_TS[0]:
                 if bond_P[1] < bond_P[2]:
                     os.system('cp ./TDD/' + self.name + '.txt ' + './TDD_p2pX/' + self.name + '.txt')
-                    print('go to p2pX')
-                    return 'X'
+                    # print('go to p2pX')
+                    return 'XP'
 
                 os.system('cp ./TDD/' + self.name + '.txt ' + './TDD_p2pY/' + self.name + '.txt')
-                print('go to p2pY')
-                return 'Y'
+                # print('go to p2pY')
+                return 'YP'
 
             os.system('cp ./TDD/' + self.name + '.txt ' + './TDD_inter/' + self.name + '.txt')
             print('go to intermediate')
@@ -201,11 +201,11 @@ class Trajectories:
                 if bond_P[0] < bond_P[1]:
                     os.system('cp ./TDD/' + self.name + '.txt ' + './TDD_r2pX/' + self.name + '.txt')
                     print('go to r2pX')
-                    return 'X'
+                    return 'XR'
 
                 os.system('cp ./TDD/' + self.name + '.txt ' + './TDD_r2pY/' + self.name + '.txt')
                 print('go to r2pY')
-                return 'Y'
+                return 'YR'
 
             if bond_R[0] >= bond_TS[0] and bond_P[0] >= bond_TS[0] and bond_R[1] >= bond_TS[1] and bond_P[1] >= \
                     bond_TS[1]:
@@ -217,11 +217,11 @@ class Trajectories:
                 if bond_P[0] < bond_P[1]:
                     os.system('cp ./TDD/' + self.name + '.txt ' + './TDD_p2pX/' + self.name + '.txt')
                     print('go to p2pX')
-                    return 'X'
+                    return 'XP'
 
                 os.system('cp ./TDD/' + self.name + '.txt ' + './TDD_p2pY/' + self.name + '.txt')
                 print('go to p2pY')
-                return 'Y'
+                return 'YP'
 
             os.system('cp ./TDD/' + self.name + '.txt ' + './TDD_inter/' + self.name + '.txt')
             print('go to intermediate')
