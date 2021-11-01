@@ -31,18 +31,18 @@ def read_conf_file():
     if not lines[1].isdigit():
         print('Invalid mode in conf file, must be a number')
         exit(1)
-    else:
-        mode = int(lines[1])
-        if mode < 1 or mode > 2:
-            print('Invalid mode in conf file, too large or too small')
-            exit(1)
+
+    mode = int(lines[1])
+    if mode < 1 or mode > 2:
+        print('Invalid mode in conf file, too large or too small')
+        exit(1)
     atoms = []
     for num in lines[2].split():
         if not num.isdigit():
             print('Invalid atom index')
             exit(1)
-        else:
-            atoms.append(int(num))
+
+        atoms.append(int(num))
     if (len(atoms) % 2) != 0:
         raise TypeError('Odd number of atomic indices have been received–this is ODD!')
     if (mode == 1 and len(atoms) != 6) or (mode == 2 and len(atoms) != 4):
@@ -61,7 +61,7 @@ def get_mode():
     return mode
 
 
-def get_atomindex(mode):
+def get_atom_index(mode):
     line = input("Enter space-separated atom indices: ")
     atoms = []
     for num in line.split():
@@ -110,7 +110,7 @@ def main():
         if judge == 'y':
             mkdir()
         mode = get_mode()
-        atom = get_atomindex(mode)
+        atom = get_atom_index(mode)
     print("Run...")
     # The attribute of Trajectories Class involves
     #    self.Get_distance(1)
@@ -134,7 +134,7 @@ def main():
     print('Trajectory analysis complete!')
     if X + Y == 0:
         print('Neither product X nor Y was formed')
-    else:
+    # else:
         output = log_results(X, Y, revert, inter, total)
         print(output)
 
