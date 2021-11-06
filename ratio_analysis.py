@@ -89,7 +89,7 @@ def log_results(X, Y, revert, inter, p2p, total):
                  total,
                  (X + Y),
                  X, Y, revert, p2p, inter,
-                 (X * 100 / (X + Y))),
+                 (X * 100 / (X + Y)),
                  (Y * 100 / (X + Y)))
     out.write(output)
     out.close()
