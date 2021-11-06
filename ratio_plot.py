@@ -133,20 +133,20 @@ def get_distance(lines, n, n_atoms, atom):
 
 def get_lines(ax, data_len):
     if data_len == 4:
-        for traj in glob.glob('./TDD_r2pA/traj*.xyz.txt'):
+        for traj in glob.glob('./TDD_r2pX/traj*.xyz.txt'):
             if os.stat(traj).st_size == 0: break
             data1 = get_data(traj)
             ax.plot(data1['n'], data1['o'], 'g-', lw=2.0, zorder=-1000)
-        for traj in glob.glob('./TDD_r2pB/traj*.xyz.txt'):
+        for traj in glob.glob('./TDD_r2pY/traj*.xyz.txt'):
             if os.stat(traj).st_size == 0: break
             data1 = get_data(traj)
             ax.plot(data1['n'], data1['o'], 'b-', lw=2.0, zorder=1000)
-    if data_len == 4:
-        for traj in glob.glob('./TDD_r2pA/traj*.xyz.txt'):
+    elif data_len == 3:
+        for traj in glob.glob('./TDD_r2pX/traj*.xyz.txt'):
             if os.stat(traj).st_size == 0: break
             data1 = get_data(traj)
             ax.plot(data1['m'], data1['n'], 'g-', lw=2.0, zorder=-1000)
-        for traj in glob.glob('./TDD_r2pB/traj*.xyz.txt'):
+        for traj in glob.glob('./TDD_r2pY/traj*.xyz.txt'):
             if os.stat(traj).st_size == 0: break
             data1 = get_data(traj)
             ax.plot(data1['m'], data1['n'], 'b-', lw=2.0, zorder=1000)
@@ -182,7 +182,7 @@ def get_scatter(data, ax):
 
 
 # Trajectory graph D vs D, share functions with D vs. T
-def dvd(filename, scattername):
+def dvd(filename):
     data = get_data('./trajTS/trajTs.txt')
     ax = initialization_dvd(data)
     get_scatter(data, ax)

@@ -82,7 +82,7 @@ def log_results(X, Y, revert, inter, p2p, total):
     out = open('./trajTS/traj_log', 'w+')
     output = 'Results\n' \
              'Total number of trajectories: {0}\n' \
-             'Total forming product: {1}\n' \
+             'Total productive trajectories: {1}\n' \
              'X: {2} Y: {3} Reactant: {4} P2P: {5} Intermediate: {6}\n' \
              'Percent product X: {7:.1f}%\n' \
              'Percent product Y: {8:.1f}%'.format(
