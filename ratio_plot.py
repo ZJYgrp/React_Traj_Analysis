@@ -134,38 +134,41 @@ def get_distance(lines, n, n_atoms, atom):
 def get_lines(ax, data_len):
     if data_len == 4:
         for traj in glob.glob('./TDD_r2pX/traj*.xyz.txt'):
-            if os.stat(traj).st_size == 0: break
+            if os.stat(traj).st_size == 0:
+                break
             data1 = get_data(traj)
             ax.plot(data1['n'], data1['o'], 'g-', lw=2.0, zorder=-1000)
         for traj in glob.glob('./TDD_r2pY/traj*.xyz.txt'):
-            if os.stat(traj).st_size == 0: break
+            if os.stat(traj).st_size == 0:
+                break
             data1 = get_data(traj)
             ax.plot(data1['n'], data1['o'], 'b-', lw=2.0, zorder=1000)
     elif data_len == 3:
         for traj in glob.glob('./TDD_r2pX/traj*.xyz.txt'):
-            if os.stat(traj).st_size == 0: break
+            if os.stat(traj).st_size == 0:
+                break
             data1 = get_data(traj)
             ax.plot(data1['m'], data1['n'], 'g-', lw=2.0, zorder=-1000)
         for traj in glob.glob('./TDD_r2pY/traj*.xyz.txt'):
-            if os.stat(traj).st_size == 0: break
+            if os.stat(traj).st_size == 0:
+                break
             data1 = get_data(traj)
             ax.plot(data1['m'], data1['n'], 'b-', lw=2.0, zorder=1000)
 
     '''
-    for traj in glob.glob('./TDD_r2pA/traj*.xyz.txt'):
+    # In case you want to restore 3D plotting
+    for traj in glob.glob('./TDD_r2pX/traj*.xyz.txt'):
         if os.stat(traj).st_size == 0: break
         data1 = get_data(traj)
         if len(data1[0]) == 4:
-            # ax.plot(data1['n'],data1['m'],data1['o'],'g-',lw=2.0,zorder=-1000)
-            ax.plot(data1['n'], data1['o'], 'g-', lw=2.0, zorder=-1000)
+            ax.plot(data1['n'],data1['m'],data1['o'],'g-',lw=2.0,zorder=-1000)
         elif len(data1[0]) == 3:
             ax.plot(data1['m'], data1['n'], 'g-', lw=2.0, zorder=-1000)
-    for traj in glob.glob('./TDD_r2pB/traj*.xyz.txt'):
+    for traj in glob.glob('./TDD_r2pY/traj*.xyz.txt'):
         if os.stat(traj).st_size == 0: break
         data1 = get_data(traj)
         if len(data1[0]) == 4:
-            # ax.plot(data1['n'],data1['m'],data1['o'],'b-',lw=2.0,zorder=1000)
-            ax.plot(data1['n'], data1['o'], 'b-', lw=2.0, zorder=1000)
+            ax.plot(data1['n'],data1['m'],data1['o'],'b-',lw=2.0,zorder=1000)
         elif len(data1[0]) == 3:
             ax.plot(data1['m'], data1['n'], 'b-', lw=2.0, zorder=1000)
     '''
@@ -182,12 +185,12 @@ def get_scatter(data, ax):
 
 
 # Trajectory graph D vs D, share functions with D vs. T
-def dvd(filename):
+def dvd(file_name):
     data = get_data('./trajTS/trajTs.txt')
     ax = initialization_dvd(data)
     get_scatter(data, ax)
     get_lines(ax, len(data[0]))
-    plt.savefig('./trajTS/' + filename.split('/')[1] + '_dvd.png', dpi=100)
+    plt.savefig('./trajTS/' + file_name.split('/')[1] + '_dvd.png', dpi=100)
 
 
 def initialization_dvd(data):
@@ -261,7 +264,7 @@ def initialization_dvd(data):
 def main():
     if len(os.listdir('./TDD_r2pX')) > 0 or len(os.listdir('./TDD_r2pY')) > 0:
         print('Now, making r2p_DVD plot')
-        dvd('./TDD_r2p/*.xyz.txt', './trajTS/trajTs.txt')
+        dvd('./TDD_r2p/*.xyz.txt')
         print('Complete!')
     else:
         print('No files found in TDD_r2p! What am I supposed to analyze?')

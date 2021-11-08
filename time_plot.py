@@ -19,7 +19,7 @@ def plot_gaps(times):
     # pyplot.xlabel('Time Gap (fs)')
     # pyplot.ylabel('Frequency')
     # pyplot.show()
-    pyplot.savefig('plt.png')
+    pyplot.savefig('./trajTS/bond_time_gaps.png', dpi=100)
 
 
 def plot_bonds(times):
@@ -37,7 +37,7 @@ def plot_bonds(times):
     # pyplot.xlabel('Formation Time (fs)')
     # pyplot.ylabel('Frequency')
     # pyplot.show()
-    pyplot.savefig('plt.png')
+    pyplot.savefig('./trajTS/bond_times.png', dpi=100)
 
 
 # main func
